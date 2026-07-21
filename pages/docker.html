@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOCKER</title>
+    <link rel="stylesheet" href="../css/estilos-principales.css">
+</head>
+<body>
+    <nav class="page-nav">
+        <ul>
+            <li><a href="../index.html">INICIO</a></li>
+            <li><a href="tailscale.html">TAILSCALE</a></li>
+            <li><a href="docker.html" class="active">DOCKER</a></li>
+            <li><a href="podman.html">PODMAN</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+
+        <!-- HERO -->
+        <header class="hero">
+            <h1>Docker</h1>
+            <p class="subtitle">Empaqueta, distribuye y ejecuta aplicaciones en cualquier entorno de forma consistente.</p>
+        </header>
+
+        <!-- QUÉ ES DOCKER -->
+        <section class="section">
+            <h2><span class="icon">📦</span> ¿Qué es Docker?</h2>
+            <div class="card">
+                <p>Docker es una plataforma de <strong>virtualización a nivel de sistema operativo</strong> que permite crear, ejecutar y distribuir aplicaciones dentro de <strong>contenedores</strong>.</p>
+                <p>A diferencia de las máquinas virtuales, los contenedores comparten el kernel del sistema operativo host, lo que los hace mucho más ligeros, rápidos y eficientes en recursos.</p>
+            </div>
+
+            <div class="layers-diagram">
+                <div class="layer layer-apps">Aplicación A &nbsp;&nbsp;|&nbsp;&nbsp; Aplicación B &nbsp;&nbsp;|&nbsp;&nbsp; Aplicación C</div>
+                <div class="layer layer-bins">Dependencias / Librerías</div>
+                <div class="layer layer-os">Docker Engine</div>
+                <div class="layer layer-hw">Sistema Operativo Host / Hardware</div>
+            </div>
+        </section>
+
+        <!-- CONTENEDORES -->
+        <section class="section">
+            <h2><span class="icon">🏗️</span> Contenedores</h2>
+            <div class="card">
+                <p>Un <strong>contenedor</strong> es una instancia en ejecución de una imagen Docker. Es el proceso aislado que contiene todo lo necesario para ejecutar una aplicación:</p>
+                <p>Su propio sistema de archivos, stack de red, variables de entorno y proceso principal. Los contenedores son efímeros: se crean, se ejecutan y se destruyen sin dejar datos persistentes a menos que se configuren <strong>volumenes</strong>.</p>
+            </div>
+        </section>
+
+        <!-- IMÁGENES -->
+        <section class="section">
+            <h2><span class="icon">🖼️</span> Imágenes y Contenedores</h2>
+            <div class="card">
+                <p>La relación entre imágenes y contenedores es clave:</p>
+                <p>Una <strong>imagen</strong> es una plantilla de solo lectura con todo lo necesario para ejecutar una app (código, runtime, configuraciones, dependencias). Un <strong>contenedor</strong> es una copia ejecutable de esa imagen.</p>
+                <p>Puedes crear miles de contenedores a partir de una misma imagen, cada uno aislado y con su propio estado.</p>
+            </div>
+        </section>
+
+        <!-- DOCKERFILE -->
+        <section class="section">
+            <h2><span class="icon">📝</span> Dockerfile</h2>
+            <div class="card">
+                <p>Un <strong>Dockerfile</strong> es un archivo de texto con instrucciones paso a paso para construir una imagen Docker. Cada instrucción crea una capa (layer) en la imagen.</p>
+            </div>
+
+            <div class="code-block">
+                <button class="btn-copy">Copiar</button>
+                <span class="lang-label">Dockerfile</span>
+<pre><code><span class="comment"># Imagen base</span>
+<span class="keyword">FROM</span> node:20-alpine
+
+<span class="comment"># Directorio de trabajo dentro del contenedor</span>
+<span class="keyword">WORKDIR</span> /app
+
+<span class="comment"># Copiar archivos de dependencias primero (cache)</span>
+<span class="keyword">COPY</span> package*.json ./
+
+<span class="comment"># Instalar dependencias</span>
+<span class="keyword">RUN</span> npm install
+
+<span class="comment"># Copiar el resto del código fuente</span>
+<span class="keyword">COPY</span> . .
+
+<span class="comment"># Puerto que expone la app</span>
+<span class="keyword">EXPOSE</span> <span class="string">3000</span>
+
+<span class="comment"># Comando de inicio</span>
+<span class="keyword">CMD</span> [<span class="string">"node"</span>, <span class="string">"server.js"</span>]</code></pre>
+            </div>
+
+            <div class="accordion">
+                <div class="accordion-header">
+                    <h3>Instrucciones comunes del Dockerfile</h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="cmd-list">
+                        <div class="cmd-item">
+                            <code>FROM</code>
+                            <span class="desc">Define la imagen base sobre la cual se construye.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>RUN</code>
+                            <span class="desc">Ejecuta comandos durante la construcción (ej: instalar paquetes).</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>COPY / ADD</code>
+                            <span class="desc">Copia archivos del host al contenedor.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>WORKDIR</code>
+                            <span class="desc">Establece el directorio de trabajo dentro del contenedor.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>EXPOSE</code>
+                            <span class="desc">Documenta qué puertos usa la aplicación.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>CMD / ENTRYPOINT</code>
+                            <span class="desc">Define el comando que se ejecuta al iniciar el contenedor.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>ENV</code>
+                            <span class="desc">Define variables de entorno.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DOCKER COMPOSE -->
+        <section class="section">
+            <h2><span class="icon">🔧</span> Docker Compose</h2>
+            <div class="card">
+                <p><strong>Docker Compose</strong> es una herramienta para definir y ejecutar aplicaciones con múltiples contenedores usando un archivo YAML. Ideal para desarrollo local, pruebas y escenarios donde necesitas varios servicios trabajando juntos.</p>
+            </div>
+
+            <div class="code-block">
+                <button class="btn-copy">Copiar</button>
+                <span class="lang-label">docker-compose.yml</span>
+<pre><code><span class="keyword">version</span>: <span class="string">"3.8"</span>
+
+<span class="keyword">services</span>:
+  <span class="command">web</span>:
+    <span class="keyword">build</span>: .
+    <span class="keyword">ports</span>:
+      - <span class="string">"3000:3000"</span>
+    <span class="keyword">depends_on</span>:
+      - <span class="string">db</span>
+    <span class="keyword">environment</span>:
+      <span class="flag">DATABASE_URL</span>: <span class="string">postgres://user:pass@db:5432/mydb</span>
+
+  <span class="command">db</span>:
+    <span class="keyword">image</span>: <span class="string">postgres:16-alpine</span>
+    <span class="keyword">volumes</span>:
+      - <span class="string">pgdata:/var/lib/postgresql/data</span>
+    <span class="keyword">environment</span>:
+      <span class="flag">POSTGRES_USER</span>: <span class="string">user</span>
+      <span class="flag">POSTGRES_PASSWORD</span>: <span class="string">pass</span>
+      <span class="flag">POSTGRES_DB</span>: <span class="string">mydb</span>
+
+<span class="keyword">volumes</span>:
+  <span class="command">pgdata</span>:</code></pre>
+            </div>
+        </section>
+
+        <!-- COMANDOS ESENCIALES -->
+        <section class="section">
+            <h2><span class="icon">⌨️</span> Comandos Esenciales</h2>
+
+            <div class="tabs">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="gestion">Gestión</button>
+                    <button class="tab-btn" data-tab="imagenes">Imágenes</button>
+                    <button class="tab-btn" data-tab="redes">Redes</button>
+                    <button class="tab-btn" data-tab="volumenes">Volúmenes</button>
+                </div>
+
+                <div class="tab-content active" data-content="gestion">
+                    <div class="cmd-list">
+                        <div class="cmd-item">
+                            <code>docker run -d --name mi-app -p 8080:80 nginx</code>
+                            <span class="desc">Crea y ejecuta un contenedor desde la imagen nginx en segundo plano.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>docker ps</code>
+                            <span class="desc">Lista los contenedores en ejecución.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>docker ps -a</code>
+                            <span class="desc">Lista todos los contenedores (incluyendo los detenidos).</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>docker stop &lt;id|nombre&gt;</code>
+                            <span class="desc">Detiene un contenedor en ejecución.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>docker rm &lt;id|nombre&gt;</code>
+                            <span class="desc">Elimina un contenedor detenido.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>docker exec -it &lt;id&gt; /bin/sh</code>
+                            <span class="desc">Abre una shell interactiva dentro de un contenedor.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>docker logs &lt;id|nombre&gt;</code>
+                            <span class="desc">Muestra los logs del contenedor.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" data-content="imagenes">
+                    <div class="cmd-list">
+                        <div class="cmd-item">
+                            <code>docker build -t mi-app:1.0 .</code>
+                            <span class="desc">Construye una imagen desde un Dockerfile.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>docker images</code>
+                            <span class="desc">Lista las imágenes locales.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>docker pull &lt;imagen&gt;</code>
+                            <span class="desc">Descarga una imagen de Docker Hub.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>docker push &lt;imagen&gt;</code>
+                            <span class="desc">Sube una imagen a un registro (Docker Hub, ECR, etc.).</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>docker rmi &lt;imagen&gt;</code>
+                            <span class="desc">Elimina una imagen local.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>docker tag &lt;imagen&gt; &lt;nuevo-tag&gt;</code>
+                            <span class="desc">Crea un alias/tag para una imagen.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" data-content="redes">
+                    <div class="cmd-list">
+                        <div class="cmd-item">
+                            <code>docker network ls</code>
+                            <span class="desc">Lista todas las redes disponibles.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>docker network create mi-red</code>
+                            <span class="desc">Crea una red personalizada.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>docker network connect mi-red &lt;contenedor&gt;</code>
+                            <span class="desc">Conecta un contenedor a una red.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>docker network disconnect mi-red &lt;contenedor&gt;</code>
+                            <span class="desc">Desconecta un contenedor de una red.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" data-content="volumenes">
+                    <div class="cmd-list">
+                        <div class="cmd-item">
+                            <code>docker volume create mi-vol</code>
+                            <span class="desc">Crea un volumen persistente.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>docker volume ls</code>
+                            <span class="desc">Lista los volúmenes disponibles.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>docker run -v mi-vol:/data &lt;imagen&gt;</code>
+                            <span class="desc">Monta un volumen dentro del contenedor.</span>
+                        </div>
+                        <div class="cmd-item">
+                            <code>docker run -v /host/path:/container/path &lt;imagen&gt;</code>
+                            <span class="desc">Mount directo de una carpeta del host (bind mount).</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPARATIVA -->
+        <section class="section">
+            <h2><span class="icon">⚖️</span> Docker vs Máquina Virtual</h2>
+            <p>Haz clic en cada columna para ver más detalles.</p>
+
+            <div class="comparison">
+                <div class="comparison-col active" id="comp-vm">
+                    <h3>Máquina Virtual</h3>
+                    <div class="visual">
+                        <div class="vm-box">VM 1</div>
+                        <div class="vm-box">VM 2</div>
+                        <div class="hw">Hardware + Hypervisor</div>
+                    </div>
+                    <ul>
+                        <li>Cada VM tiene su propio SO completo</li>
+                        <li>Mayor consumo de RAM y disco</li>
+                        <li>Arranque en minutos</li>
+                        <li>Aislamiento a nivel de hardware</li>
+                        <li>Ideal para correr diferentes SO</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-col" id="comp-docker">
+                    <h3>Docker</h3>
+                    <div class="visual">
+                        <div class="container-box">Contenedor A</div>
+                        <div class="container-box">Contenedor B</div>
+                        <div class="hw">Docker Engine + Kernel del SO</div>
+                    </div>
+                    <ul>
+                        <li>Comparten el kernel del SO host</li>
+                        <li>Muy ligeros (MBs vs GBs)</li>
+                        <li>Arranque en segundos</li>
+                        <li>Aislamiento a nivel de proceso</li>
+                        <li>Misma app, cualquier entorno</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>TDP &mdash; Tecnologías de la Plataforma</p>
+        </footer>
+
+    </div>
+
+    <script src="../js/docker.js"></script>
+</body>
+</html>
